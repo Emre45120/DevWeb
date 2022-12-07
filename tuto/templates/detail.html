@@ -1,0 +1,14 @@
+{% extends "home.html" %} 
+{% block styles %}
+{{ super() }}
+<link rel = "stylesheet" href="{{ url_for('static', filename = 'home.css')}}">
+{% endblock %}
+{% block content %} 
+<h1>{{title}}</h1>
+<div class="sample">
+    <h2>{{book.title}}</h2>
+    <img src="{{ url_for('static', filename='images/'+book.img) }}" alt="{{book.title}}" title="{{book.title}}">
+    <p>{{book.author}}</p>
+    <p>{{book.price}}</p>
+</div> 
+{% endblock %}

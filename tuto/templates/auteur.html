@@ -1,0 +1,18 @@
+{% extends "home.html" %} 
+{% block styles %}
+{{ super() }}
+<link rel = "stylesheet" href="{{ url_for('static', filename = 'home.css')}}">
+{% endblock %}
+{% block content %} 
+<h1>{{title}}</h1>
+{% if current_user.is_authenticated %}
+    <a href="{{ url_for('edit_autor',id=author.id) }}">Edit</a>
+{% endif %}
+<div class="sample">
+    <ul>
+        {% for auteur in auteurs %}
+        <p><a href="{{ url_for('info_auteur', id = auteur.id) }}">{{auteur.name}}</a></p>
+        {% endfor %}
+    </ul>
+</div> 
+{% endblock %}
