@@ -33,10 +33,11 @@ def auteur():
         )
 
 @app.route("/compte")
+@login_required
 def compte():
     return render_template(
-        "compte.html"
-        )
+        "compte.html",
+        user=current_user)
 
 class AuthorForm(FlaskForm):
     id = HiddenField('id')
@@ -62,6 +63,10 @@ def livre_auteur(id):
     return render_template(
         "livre_auteur.html",livres = get_livre_auteur(id)
         )
+
+@app.route("/auteur/nb_livre/<id>")
+
+
     
 
 
