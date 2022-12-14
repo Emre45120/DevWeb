@@ -61,10 +61,11 @@ def info_auteur(id):
 @app.route("/auteur/livre/<id>")
 def livre_auteur(id):
     return render_template(
-        "livre_auteur.html",livres = get_livre_auteur(id)
+        "livre_auteur.html",livres = get_livre_auteur(id),auteur = get_info_auteur(id)
         )
 
 @app.route("/auteur/nb_livre/<id>")
+
 
 
     
