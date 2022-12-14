@@ -36,6 +36,13 @@ class Book(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("author.id"))
     author = db.relationship("Author", backref=db.backref("books", lazy="dynamic"))
 
+class Favorite(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.String(80), db.ForeignKey("user.username"))
+    book_id = db.Column(db.Integer, db.ForeignKey("book.id"))
+    user = db.relationship("User", backref=db.backref("favorites", lazy="dynamic"))
+    book = db.relationship("Book", backref=db.backref("favorites", lazy="dynamic"))
+
 def __repr__ (self ):
     return "<Book (%d) %s>" % (self.id , self.title)
 
@@ -58,6 +65,20 @@ def get_nb_livre_auteur(id):
     id_a = int(id) + 1
     return Book.query.filter_by(Book.author_id == id_a).all()
 
+def ajouter_favoris(idUser,idLivre):
+    fav = Favorite(user_id=idUser,book_id=idLivre)
+    db.session.add(fav)
+    db.session.commit()
+
+def supprimer_favoris(idUser,idLivre):
+    fav = Favorite.query.filter_by(user_id=idUser,book_id=idLivre).first()
+    db.session.delete(fav)
+    db.session.commit()
+
+def get_favoris(idUser):
+    return Favorite.query.filter_by(user_id=idUser).all()
+
 @login_manager.user_loader
 def load_user(username):
     return User.query.get(username) 
+
