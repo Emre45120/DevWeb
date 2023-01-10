@@ -13,7 +13,7 @@
         <p>{{ x.title }}</p>
         <p>{{ x.author }}</p>
         <p>{{ x.price }} €</p>
-        <button><a href= "{{url_for('add_favorite', id=auteur.id)}}">Ajouter au favoris</a></button>
+        <button><a href= "{{url_for('add_favorite', book_id=x.id)}}">Ajouter au favoris</a></button>
         {% endfor %} 
 </div> 
 {% endblock %}

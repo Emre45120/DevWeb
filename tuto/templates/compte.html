@@ -5,5 +5,16 @@
 {% endblock %}
 {% block content %}
 <h1>Bienvenue sur votre compte , {{user.username}}</h1>
+<div class="sample">
+        <h2>Voici vos livres favoris</h2>
+        {% for x in favorites_books %}
+        <a href="{{url_for('detail', id=x.id)}}">
+            <img src="{{ url_for('static', filename='images/'+x.img) }}" alt="{{x.title}}" title="{{x.title}}">
+        </a>
+        <p>{{ x.title }}</p>
+        <p>{{ x.author }}</p>
+        <p>{{ x.price }} €</p>
+        <button><a href= "{{url_for('delete_favorite', book_id=x.id)}}">Supprimer des favoris</a></button>
+        {% endfor %}
 
 {% endblock %}

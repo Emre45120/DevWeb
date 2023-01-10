@@ -82,3 +82,9 @@ def get_favoris(idUser):
 def load_user(username):
     return User.query.get(username) 
 
+def get_favorites_books(user_id):
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    books = [favorite.book for favorite in favorites]
+    return books
+
+
