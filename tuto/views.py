@@ -4,7 +4,7 @@ from .models import get_sample , get_auteur , get_auteur2 , get_info_auteur , ge
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField , PasswordField
 from wtforms.validators import DataRequired
-from .models import User
+from .models import *
 from hashlib import sha256
 from flask_login import login_user, current_user , logout_user , login_required
 from .app import app,db
@@ -124,7 +124,27 @@ def login():
         "login.html",
         form=f)
 
+    
+
 @app.route("/logout/")
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+class BookForm(FlaskForm):
+    id = HiddenField('id')
+    title = StringField('Title', validators=[DataRequired()])
+    author = StringField('Author', validators=[DataRequired()])
+
+# @app.route("add/favorite/", methods=['POST',])
+# @login_required
+# def add_favorite():
+#     f = BookForm()
+#     if f.validate_on_submit():
+#         id = int(f.id.data)
+#         title = f.title.data
+#         author = f.author.data
+#         b = Favorite(id=id, title=title, author=author)
+#         db.session.add(b)
+#         db.session.commit()
+#         return redirect(url_for('home'))
