@@ -5,9 +5,6 @@
 {% endblock %}
 {% block content %} 
 <h1>{{title}}</h1>
-{% if current_user.is_authenticated %}
-    <a href="{{ url_for('edit_autor',id=author.id) }}">Edit</a>
-{% endif %}
 <div class="row g-4">
     <div class="col-sm-12 col-xl-6">
         <div class="bg-light rounded h-100 p-4">
