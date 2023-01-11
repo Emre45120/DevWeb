@@ -148,3 +148,29 @@ class BookForm(FlaskForm):
 #         db.session.add(b)
 #         db.session.commit()
 #         return redirect(url_for('home'))
+
+# recupeer les données de la barre de recherche et les afficher dans la page resultat.html
+
+class SearchForm(FlaskForm):
+    search = StringField('search', validators=[DataRequired()])
+
+@app.route("/search/", methods=['POST'])
+def search():
+    f = SearchForm()
+    mot = f.search.data
+    print(mot)
+    print(type(mot))
+    books= Book.query.filter(Book.title.like('%'+mot+'%')).all()
+    print(books)
+    return render_template(
+        "resultat.html",
+        form=f, result=books)
+        
+    
+        
+        
+
+
+        
+
+
