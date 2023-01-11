@@ -47,6 +47,10 @@
                                 <li><a href="{{ url_for('logout') }}">
                                     <span class="glyphicon glyphicon-log-out" title="Logout">Deconnexion</span>
                                 </a></li>
+                            {% else %}
+                                <li><a href="{{ url_for('login') }}">
+                                    <span class="glyphicon glyphicon-log-in" title="Login">Connexion</span>
+                                </a></li>
                             {% endif %}
                         </ul>
                     </div>

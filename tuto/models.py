@@ -1,17 +1,6 @@
 from .app import db
 from flask_login import UserMixin
 from .app import login_manager
-# import yaml , os.path
-
-# Books = yaml.safe_load(open(os.path.join(os.path.dirname(__file__),"data.yml")))
-
-# i=0
-# for book in Books:
-#     book['id'] = i
-#     i+=1
-
-# def get_sample():
-#     return Books[0:10]
 
 class User(db.Model,UserMixin):
     username = db.Column(db.String(80), primary_key=True)
@@ -25,7 +14,7 @@ class Author(db.Model):
     name = db.Column(db.String(100), unique=True)
 
     def __repr__(self) -> str:
-        return "<Author: %d %s>" % (self.id , self.name)
+        return "%s" % (self.name)
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,9 +26,8 @@ class Book(db.Model):
     author = db.relationship("Author", backref=db.backref("books", lazy="dynamic"))
 
 class Favorite(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(80), db.ForeignKey("user.username"))
-    book_id = db.Column(db.Integer, db.ForeignKey("book.id"))
+    user_id = db.Column(db.String(80), db.ForeignKey("user.username") , primary_key=True)
+    book_id = db.Column(db.Integer, db.ForeignKey("book.id"), primary_key=True)
     user = db.relationship("User", backref=db.backref("favorites", lazy="dynamic"))
     book = db.relationship("Book", backref=db.backref("favorites", lazy="dynamic"))
 
@@ -51,6 +39,9 @@ def get_sample():
 
 def get_auteur():
     return Author.query.all()
+
+def get_livre(id):
+    return Book.query.get(id)
 
 def get_auteur2(id):
     return Author.query.get(id)
@@ -81,4 +72,12 @@ def get_favoris(idUser):
 @login_manager.user_loader
 def load_user(username):
     return User.query.get(username) 
+
+def get_favorites_books(user_id):
+    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    books = []
+    for favoris in favorites:
+        books.append(get_livre(favoris.book_id))
+    return books
+
 

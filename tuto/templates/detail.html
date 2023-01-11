@@ -10,5 +10,10 @@
     <img src="{{ url_for('static', filename='images/'+book.img) }}" alt="{{book.title}}" title="{{book.title}}">
     <p>{{book.author}}</p>
     <p>{{book.price}}</p>
+    {% if var == True%}
+            <button><a href= "{{url_for('remove_favorite', book_id=book.id)}}">Supprimer des favoris</a></button>
+        {% else %}
+            <button><a href= "{{url_for('add_favorite', book_id=book.id)}}">Ajouter au favoris</a></button>
+        {% endif %}
 </div> 
 {% endblock %}

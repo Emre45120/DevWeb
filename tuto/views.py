@@ -1,6 +1,6 @@
 from .app import app
 from flask import render_template, request , redirect , url_for
-from .models import get_sample , get_auteur , get_auteur2 , get_info_auteur , get_livre_auteur , get_nb_livre_auteur
+from .models import get_sample , get_auteur , get_auteur2 , get_info_auteur , get_livre_auteur , get_favorites_books
 from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField , PasswordField
 from wtforms.validators import DataRequired
@@ -15,15 +15,19 @@ def home():
     return render_template(
         "home.html",
         title = "My Books",
-        books = get_sample()
+        books = get_sample(),
     )
 
 @app.route("/detail/<id>")
 def detail(id):
-    books = get_sample()
-    book = books[int(id)]
+    book = get_livre(id)
+    var = False
+    if current_user.is_authenticated:
+        for fav in current_user.favorites:
+            if fav.book_id == book.id:
+                var = True
     return render_template(
-        "detail.html",
+        "detail.html", var = var,
         book=book)
 
 @app.route("/auteur")
@@ -37,6 +41,7 @@ def auteur():
 def compte():
     return render_template(
         "compte.html",
+        favorites_books = get_favorites_books(current_user.username),
         user=current_user)
 
 class AuthorForm(FlaskForm):
@@ -60,15 +65,10 @@ def info_auteur(id):
 
 @app.route("/auteur/livre/<id>")
 def livre_auteur(id):
+    livres= get_livre_auteur(id)
     return render_template(
-        "livre_auteur.html",livres = get_livre_auteur(id),auteur = get_info_auteur(id)
+        "livre_auteur.html",livres = livres
         )
-
-@app.route("/auteur/nb_livre/<id>")
-
-
-
-    
 
 
 @app.route("/save/author/", methods=['POST',])
@@ -136,20 +136,23 @@ class BookForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     author = StringField('Author', validators=[DataRequired()])
 
-# @app.route("add/favorite/", methods=['POST',])
-# @login_required
-# def add_favorite():
-#     f = BookForm()
-#     if f.validate_on_submit():
-#         id = int(f.id.data)
-#         title = f.title.data
-#         author = f.author.data
-#         b = Favorite(id=id, title=title, author=author)
-#         db.session.add(b)
-#         db.session.commit()
-#         return redirect(url_for('home'))
+@app.route("/add/favorite/<book_id>", methods=['GET', 'POST',])
+@login_required
+def add_favorite(book_id):
+    book = Book.query.filter_by(id=book_id).first_or_404()
+    favorite = Favorite(user_id=current_user.username, book_id=book.id) 
+    db.session.add(favorite)
+    db.session.commit()
+    return redirect(url_for('compte'))
 
-# recupeer les données de la barre de recherche et les afficher dans la page resultat.html
+@app.route("/remove/favorite/<book_id>", methods=['GET', 'POST',])
+@login_required
+def remove_favorite(book_id):
+    book = Book.query.filter_by(id=book_id).first_or_404()
+    favorite = Favorite.query.filter_by(user_id=current_user.username, book_id=book.id).first_or_404()
+    db.session.delete(favorite)
+    db.session.commit()
+    return redirect(url_for('compte'))
 
 class SearchForm(FlaskForm):
     search = StringField('search', validators=[DataRequired()])
@@ -166,11 +169,6 @@ def search():
         "resultat.html",
         form=f, result=books)
         
-    
-        
-        
 
-
-        
 
 
