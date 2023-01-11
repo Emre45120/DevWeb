@@ -18,19 +18,16 @@ def home():
         books = get_sample(),
     )
 
-@app.route("/compte")
-def compte():
-    return render_template(
-        "compte.html",
-        favorites_books = get_favorites_books(current_user.username)
-    )
-
 @app.route("/detail/<id>")
 def detail(id):
-    books = get_sample()
-    book = books[int(id)]
+    book = get_livre(id)
+    var = False
+    if current_user.is_authenticated:
+        for fav in current_user.favorites:
+            if fav.book_id == book.id:
+                var = True
     return render_template(
-        "detail.html",
+        "detail.html", var = var,
         book=book)
 
 @app.route("/auteur")
@@ -44,6 +41,7 @@ def auteur():
 def compte():
     return render_template(
         "compte.html",
+        favorites_books = get_favorites_books(current_user.username),
         user=current_user)
 
 class AuthorForm(FlaskForm):
@@ -67,8 +65,9 @@ def info_auteur(id):
 
 @app.route("/auteur/livre/<id>")
 def livre_auteur(id):
+    livres= get_livre_auteur(id)
     return render_template(
-        "livre_auteur.html",livres = get_livre_auteur(id)
+        "livre_auteur.html",livres = livres
         )
 
 
@@ -141,18 +140,19 @@ class BookForm(FlaskForm):
 @login_required
 def add_favorite(book_id):
     book = Book.query.filter_by(id=book_id).first_or_404()
-    favorite = Favorite(user_id=current_user.username, book_id=book.id)
+    favorite = Favorite(user_id=current_user.username, book_id=book.id) 
     db.session.add(favorite)
     db.session.commit()
-    return redirect(url_for('home'))
+    return redirect(url_for('compte'))
 
-# fonction qui me retourne les livres dans mes favoris avec l'id de l'utilisateur
-@app.route("/favoris/<user_id>")
+@app.route("/remove/favorite/<book_id>", methods=['GET', 'POST',])
 @login_required
-def favoris(user_id):
-    return render_template(
-        "favoris.html",favoris = get_favorites_books(user_id)
-        )
+def remove_favorite(book_id):
+    book = Book.query.filter_by(id=book_id).first_or_404()
+    favorite = Favorite.query.filter_by(user_id=current_user.username, book_id=book.id).first_or_404()
+    db.session.delete(favorite)
+    db.session.commit()
+    return redirect(url_for('compte'))
 
 
 
