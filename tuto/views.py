@@ -154,6 +154,21 @@ def remove_favorite(book_id):
     db.session.commit()
     return redirect(url_for('compte'))
 
+class SearchForm(FlaskForm):
+    search = StringField('search', validators=[DataRequired()])
+
+@app.route("/search/", methods=['POST'])
+def search():
+    f = SearchForm()
+    mot = f.search.data
+    print(mot)
+    print(type(mot))
+    books= Book.query.filter(Book.title.like('%'+mot+'%')).all()
+    print(books)
+    return render_template(
+        "resultat.html",
+        form=f, result=books)
+        
 
 
 

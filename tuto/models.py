@@ -1,17 +1,6 @@
 from .app import db
 from flask_login import UserMixin
 from .app import login_manager
-# import yaml , os.path
-
-# Books = yaml.safe_load(open(os.path.join(os.path.dirname(__file__),"data.yml")))
-
-# i=0
-# for book in Books:
-#     book['id'] = i
-#     i+=1
-
-# def get_sample():
-#     return Books[0:10]
 
 class User(db.Model,UserMixin):
     username = db.Column(db.String(80), primary_key=True)
