@@ -8,12 +8,12 @@
 <div class="row g-4">
     <div class="col-sm-12 col-xl-6">
         <div class="bg-light rounded h-100 p-4">
-            <h6 class="mb-4">Basic Table</h6>
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Nom</th>
+                        <th scope="col">Auteur</th>
                         <th scope="col">Visuel</th>
                         
                     </tr>
@@ -23,6 +23,7 @@
                     <tr>
                         <th scope="row">{{book.id}}</th>
                         <td><a href="{{ url_for('info_auteur', id = book.id) }}">{{book.title}}</a></td>
+                        <td>{{book.author}}</td>
                         <td><img src="{{ url_for('static', filename='images/'+book.img) }}" alt=""></td>
                     </tr>
                     {% endfor %}

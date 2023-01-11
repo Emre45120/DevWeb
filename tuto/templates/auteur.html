@@ -8,13 +8,11 @@
 <div class="row g-4">
     <div class="col-sm-12 col-xl-6">
         <div class="bg-light rounded h-100 p-4">
-            <h6 class="mb-4">Basic Table</h6>
             <table class="table">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Nom</th>
-                        <th scope="col">Enregistrer</th>
                         
                     </tr>
                 </thead>
@@ -23,7 +21,6 @@
                     <tr>
                         <th scope="row">{{auteur.id}}</th>
                         <td><a href="{{ url_for('info_auteur', id = auteur.id) }}">{{auteur.name}}</a></td>
-                        <td><input type="checkbox" name="" id=""></td>
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -45,11 +45,13 @@
                                 <li><p>{{current_user.username}}</p></li>
                                 
                                 <li><a href="{{ url_for('logout') }}">
-                                    <span class="glyphicon glyphicon-log-out" title="Logout">Deconnexion</span>
+                                    <button class="button"> Deconnexion
+                                    </button>
                                 </a></li>
                             {% else %}
                                 <li><a href="{{ url_for('login') }}">
-                                    <span class="glyphicon glyphicon-log-in" title="Login">Connexion</span>
+                                    <button class="button"> Connexion
+                                    </button>
                                 </a></li>
                             {% endif %}
                         </ul>
@@ -66,11 +68,6 @@
 
             </div>
         </main>
-        <footer class ="footer mt-auto py-3 bg-light">
-            <div class="container">
-                <span class="text-muted">Place sticky footer content here.</span>
-            </div>
-        </footer>
         {% block scripts %} 
             {{ bootstrap.load_js() }}
         {% endblock %} 
