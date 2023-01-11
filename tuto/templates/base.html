@@ -4,6 +4,9 @@
         {% block head %}
         <meta charset = "utf-8">
         <meta name = "viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel = "stylesheet" href="{{ url_for('static', filename = 'home.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'styles.css')}}">
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'bootstrap.min.css')}}">
         {% block styles %} 
             {{ bootstrap.load_css() }}
         {% endblock %} 
@@ -33,9 +36,9 @@
                             <a class="nav-link" href="/compte">Compte</a>
                           </li>
                         </ul>
-                        <form class="d-flex" role="search">
-                          <input class = "form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                          <button class="btn btn-outline-success" type ="submit">Search</button>
+                        <form class="d-flex" method="POST" role="search" action = "{{url_for('search')}}"  >
+                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
                         </form>
                         <ul class="nav navbar-nav navbar-right">
                             {% if current_user.is_authenticated %}
