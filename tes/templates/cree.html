@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block styles %}
+{{ super() }}
+<link rel = "stylesheet" href="{{ url_for('static', filename = 'home.css')}}">
+{% endblock %}
+{% block content %}
+
+<body>
+  <h1>Création de Compte</h1>
+  <form method="POST" form role="form" action="{{url_for('cree')}}">
+    <label for="username">Nom d'utilisateur:</label>
+    <input type="text" id="username" name="username"><br><br>
+    <label for="password">Mot de passe:</label>
+    <input type="password" id="password" name="password"><br><br>
+    <input type="submit" value="Créer un compte"></a>
+  </form>
+{% endblock %}
