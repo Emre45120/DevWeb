@@ -168,7 +168,49 @@ def search():
     return render_template(
         "resultat.html",
         form=f, result=books)
-        
+
+
+class RegisterForm(FlaskForm):
+    username = StringField("username")
+    password = PasswordField("password")
+    next = HiddenField()
+
+    def get_authenticated_user(self):
+        user = User.query.get(self.username.data)
+        if user is None:
+            return None
+        m = sha256()
+        m.update
+        passwd = m.hexdigest()
+        if user.password == passwd:
+            return user
+        return None
+
+@app.route("/cree/", methods=['GET', 'POST'])
+def cree():
+    return render_template("cree.html")
+    
+
+@app.route("/register" , methods=['GET', 'POST'])
+def register():
+    f = RegisterForm()
+    dejaUtilise = False
+    user = User.query.filter_by(username=f.username.data).first()
+    if user is None:
+        m = sha256()
+        m.update(f.password.data.encode())
+        passwd = m.hexdigest()
+        user = User(username=f.username.data, password=passwd, admin=False)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('login'))
+    else:
+        dejaUtilise = True
+        print("no")
+    print("hello emgaro")      
+    return render_template(
+        "cree.html",
+        form=f, dejaUtilise=dejaUtilise)
 
 
 
