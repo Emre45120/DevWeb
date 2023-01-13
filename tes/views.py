@@ -8,6 +8,8 @@ from .models import *
 from hashlib import sha256
 from flask_login import login_user, current_user , logout_user , login_required
 from .app import app,db
+from flask import flash
+
 
 
 @app.route("/")
@@ -170,9 +172,11 @@ def search():
         form=f, result=books)
 
 
+# je veux cree une methode qui permet de cree un compte et de se connecter avec ce compte
+
 class RegisterForm(FlaskForm):
-    username = StringField("username")
-    password = PasswordField("password")
+    username = StringField("Username")
+    password = PasswordField("Password")
     next = HiddenField()
 
     def get_authenticated_user(self):
@@ -186,31 +190,32 @@ class RegisterForm(FlaskForm):
             return user
         return None
 
-@app.route("/cree/", methods=['GET', 'POST'])
-def cree():
-    return render_template("cree.html")
-    
 
-@app.route("/register" , methods=['GET', 'POST'])
-def register():
+@app.route("/cree" , methods=['GET', 'POST'])
+def cree():
     f = RegisterForm()
-    dejaUtilise = False
-    user = User.query.filter_by(username=f.username.data).first()
-    if user is None:
-        m = sha256()
-        m.update(f.password.data.encode())
-        passwd = m.hexdigest()
-        user = User(username=f.username.data, password=passwd, admin=False)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('login'))
-    else:
-        dejaUtilise = True
-        print("no")
-    print("hello emgaro")      
+    if f.validate_on_submit():
+        user = User.query.filter_by(username=f.username.data).first()
+        print(user)
+        if user is None:
+            m = sha256()
+            m.update(f.password.data.encode())
+            passwd = m.hexdigest()
+            user = User(username=f.username.data, password=passwd)
+            db.session.add(user)
+            print("ok")
+            db.session.commit()
+            return redirect(url_for('login'))
+        else:
+            flash("Le nom d'utilisateur existe déjà.")
+            print("no")      
     return render_template(
         "cree.html",
-        form=f, dejaUtilise=dejaUtilise)
+        form=f)
+
+
+
+        
 
 
 

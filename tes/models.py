@@ -2,7 +2,7 @@ from .app import db
 from flask_login import UserMixin
 from .app import login_manager
 
-class User(db.Model,UserMixin):
+class User(db.Model,UserMixin): 
     username = db.Column(db.String(80), primary_key=True)
     password = db.Column(db.String(80))
     admin = db.Column(db.Boolean)

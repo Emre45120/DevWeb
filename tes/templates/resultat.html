@@ -1,0 +1,33 @@
+{% extends "home.html" %} 
+{% block styles %}
+{{ super() }}
+<link rel = "stylesheet" href="{{ url_for('static', filename = 'home.css')}}">
+{% endblock %}
+{% block content %} 
+<h1>{{title}}</h1>
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-6">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Basic Table</h6>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Visuel</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in result %}
+                    <tr>
+                        <th scope="row">{{book.id}}</th>
+                        <td><a href="{{ url_for('info_auteur', id = book.id) }}">{{book.title}}</a></td>
+                        <td><img src="{{ url_for('static', filename='images/'+book.img) }}" alt=""></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
