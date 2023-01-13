@@ -49,13 +49,14 @@ def loaddb(filename):
 @app.cli.command()
 @click.argument('username')
 @click.argument('password')
-def newuser(username,password):
+@click.argument('admin',default=False)
+def newuser(username,password,admin):
     '''Add a new user'''
     from .models import User
     from hashlib import sha256
     m = sha256()
     m.update(password.encode())
-    u = User(username=username,password=m.hexdigest())
+    u = User(username=username,password=m.hexdigest(),admin=admin)
     db.session.add(u)
     db.session.commit()
     
