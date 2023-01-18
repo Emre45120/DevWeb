@@ -22,7 +22,7 @@
                     {% for book in result %}
                     <tr>
                         <th scope="row">{{book.id}}</th>
-                        <td><a href="{{ url_for('info_auteur', id = book.id) }}">{{book.title}}</a></td>
+                        <td><a href="{{ url_for('detail', id = book.id) }}">{{book.title}}</a></td>
                         <td>{{book.author}}</td>
                         <td><img src="{{ url_for('static', filename='images/'+book.img) }}" alt=""></td>
                     </tr>
